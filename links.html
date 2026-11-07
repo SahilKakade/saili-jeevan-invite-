@@ -7,54 +7,72 @@
 <title>Invitation Links</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Mukta:wght@400;500;600&display=swap">
 <style>
-:root { --wine: #4a1226; --wine-deep: #1e0810; --gold: #c4a468; --gold-ink: #7d5e22; --ivory: #f7f0e4; --ivory-2: #efe5d3; --ink: #2a1820; --soft: #6c5a5f; --line: rgba(125,94,34,.35); }
+:root { --wine: #4a1226; --gold: #c4a468; --gold-ink: #7d5e22; --ivory: #f7f0e4; --ivory-2: #efe5d3; --ink: #2a1820; --soft: #6c5a5f; --line: rgba(125,94,34,.35); --green: #1f6b46; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--ivory); color: var(--ink); font: 16px/1.55 'Mukta', 'Noto Sans Devanagari', system-ui, sans-serif; }
 main { max-width: 680px; margin: 0 auto; padding: 32px max(18px, env(safe-area-inset-left)) 64px; }
 h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: 2.2rem; color: var(--wine); margin: 0 0 4px; }
-.lead { color: var(--soft); margin: 0 0 28px; }
+h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 1.5rem; color: var(--wine); margin: 0 0 4px; }
+.lead { color: var(--soft); margin: 0 0 24px; }
+.site { display: inline-block; font-weight: 600; color: var(--gold-ink); word-break: break-all; }
 label { display: block; font-weight: 600; font-size: .85rem; letter-spacing: .04em; margin: 20px 0 6px; color: var(--wine); }
 .hint { font-weight: 400; color: var(--soft); letter-spacing: 0; }
 input, textarea, select { width: 100%; font: inherit; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 0; padding: 10px 12px; }
 textarea { min-height: 140px; resize: vertical; }
-#msg { min-height: 96px; }
+.msg { min-height: 100px; }
 input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; }
-.row { display: grid; gap: 14px; grid-template-columns: 1fr; }
-@media (min-width: 560px) { .row.two { grid-template-columns: 1fr 1fr; } }
-.btn { display: inline-block; border: 1px solid var(--wine); background: var(--wine); color: var(--ivory); padding: 10px 20px; font: 600 .95rem/1.2 inherit; font-family: inherit; cursor: pointer; text-decoration: none; border-radius: 0; text-align: center; }
+.btn { display: inline-block; border: 1px solid var(--wine); background: var(--wine); color: var(--ivory); padding: 10px 20px; font: 600 .95rem/1.2 'Mukta', system-ui, sans-serif; cursor: pointer; text-decoration: none; border-radius: 0; text-align: center; }
 .btn.alt { background: transparent; color: var(--wine); }
-.btn.wa { background: #1f6b46; border-color: #1f6b46; }
+.btn.wa { background: var(--green); border-color: var(--green); color: #fff; }
 .btn.small { padding: 8px 14px; font-size: .85rem; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.card { border: 1px solid var(--line); background: var(--ivory-2); padding: 18px 16px 20px; margin-bottom: 30px; }
+.card code { display: block; font-size: .82rem; color: var(--soft); word-break: break-all; margin: 8px 0 12px; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 34px 0 4px; }
 ul { list-style: none; padding: 0; margin: 26px 0 0; border-top: 1px solid var(--line); }
 li { display: grid; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--line); }
 li b { font-size: 1.05rem; overflow-wrap: anywhere; }
 li code { font-size: .78rem; color: var(--soft); word-break: break-all; }
 li .btns { display: flex; flex-wrap: wrap; gap: 8px; }
 .count { margin-top: 26px; font-weight: 600; color: var(--gold-ink); }
-.note { margin-top: 34px; padding: 14px 16px; background: var(--ivory-2); border-left: 3px solid var(--gold); font-size: .92rem; color: var(--soft); }
 </style>
 </head>
 <body>
 <main>
   <h1>Invitation links</h1>
-  <p class="lead">Paste your guest names, get one personal link each, and send it on WhatsApp in a tap. Nothing leaves this page.</p>
+  <p class="lead">Invitation website: <span class="site" id="site"></span></p>
 
-  <label for="base">Your invitation website address</label>
-  <input id="base" type="url" inputmode="url" placeholder="https://saili-jeevan-invite.vercel.app" autocomplete="off">
+  <label for="lang">Open the invitation in <span class="hint">(guests can still switch)</span></label>
+  <select id="lang"><option value="mr">Marathi</option><option value="en">English</option></select>
 
-  <div class="row two">
-    <div>
-      <label for="lang">Open the invitation in</label>
-      <select id="lang"><option value="mr">Marathi (guest can switch)</option><option value="en">English (guest can switch)</option></select>
+  <!-- group -->
+  <h2 style="margin-top: 30px">One link for a group</h2>
+  <div class="card">
+    <p style="margin: 0; color: var(--soft)">Same link for everyone. It greets them with "Family &amp; Friends".</p>
+    <code id="glink"></code>
+    <label for="gstyle" style="margin-top: 0">Message style</label>
+    <select id="gstyle"></select>
+    <label for="gmsg">Message <span class="hint">You can edit it. {link} is filled in.</span></label>
+    <textarea id="gmsg" class="msg"></textarea>
+    <div class="actions">
+      <a class="btn wa" id="g-wa" target="_blank" rel="noopener">Send on WhatsApp</a>
+      <button class="btn alt share" id="g-share" type="button" hidden>Share</button>
+      <button class="btn alt" id="g-copy" type="button">Copy link</button>
     </div>
   </div>
+
+  <hr>
+  <h2 style="margin-top: 26px">Personal links</h2>
+  <p class="lead" style="margin-bottom: 0">One link per guest. Each person sees their own name on the curtain.</p>
 
   <label for="names">Guest names <span class="hint">one per line. Add a phone number after a comma to open that person's chat directly.</span></label>
   <textarea id="names" placeholder="Rahul Sharma, 9876543210&#10;Priya Patil&#10;पाटील कुटुंब&#10;Mama & Mami, 9123456780"></textarea>
 
-  <label for="msg">WhatsApp message <span class="hint">{name} and {link} are filled in for each guest.</span></label>
-  <textarea id="msg"></textarea>
+  <label for="pstyle">Message style</label>
+  <select id="pstyle"></select>
+
+  <label for="msg">Message <span class="hint">You can edit it. {name} and {link} are filled in for each guest.</span></label>
+  <textarea id="msg" class="msg"></textarea>
 
   <div class="actions">
     <button class="btn" id="go" type="button">Make links</button>
@@ -63,27 +81,52 @@ li .btns { display: flex; flex-wrap: wrap; gap: 8px; }
 
   <p class="count" id="count" hidden></p>
   <ul id="out"></ul>
-
-  <p class="note">Everyone can also use the plain link without a name. The invitation then greets them with "Family &amp; Friends".</p>
 </main>
 
 <script>
 (function () {
+  var BASE = 'https://didi-invite.sahilkakade.in';
   function $(id) { return document.getElementById(id); }
-  var DEFAULT_MSG = 'नमस्कार {name}! सायली आणि जीवन यांच्या विवाहाचे आपणास सप्रेम निमंत्रण. 🙏\nWith love, you are invited to the wedding of Saili & Jeevan.\n\n{link}';
-  var KEY = 'invite-links-v1';
-  var store = {};
+  $('site').textContent = BASE;
+
+  var G_STYLES = [
+    ['Marathi + English (recommended)',
+      '॥ श्री गणेशाय नमः ॥\n\n🙏 नमस्कार सर्वांना!\n\n*सायली आणि जीवन* यांचा शुभविवाह\n📅 शनिवार, १२ डिसेंबर २०२६\n📍 निसर्ग गार्डन मंगल कार्यालय, आवसरी, ता. आंबेगाव\n\nआपण सर्वांनी सहकुटुंब उपस्थित राहून वधू-वरांना आशीर्वाद द्यावेत, ही नम्र विनंती.\n\nWedding of *Saili & Jeevan* · 12 Dec 2026. We would love to see you there!\n\n✨ खास डिजिटल निमंत्रण पाहण्यासाठी लिंक उघडा आणि पडदा सरकवा:\n{link}'],
+    ['Short and friendly (English)',
+      'Hello everyone! 🎉\n\nSaili & Jeevan are getting married on *12 December 2026* and you are all invited.\n\nWe made a little digital invitation with the schedule and the location. Open the link and slide the curtains apart ✨\n\n{link}\n\nPlease do come and bless the couple 🙏'],
+    ['Traditional (Marathi only)',
+      '॥ श्री गणेशाय नमः ॥\n\nनमस्कार,\n\nआमच्या घरी मंगलकार्य आहे! *सायली आणि जीवन* यांचा शुभविवाह *शनिवार, १२ डिसेंबर २०२६* रोजी निसर्ग गार्डन मंगल कार्यालय, आवसरी (आंबेगाव) येथे होणार आहे.\n\nआपल्या उपस्थितीशिवाय हा आनंद अपूर्ण आहे. 🙏\n\nडिजिटल निमंत्रण पाहण्यासाठी खालील लिंक उघडा:\n{link}\n\n॥ सप्रेम निमंत्रण ॥']
+  ];
+  var P_STYLES = [
+    ['Warm, Marathi + English (recommended)',
+      'नमस्कार {name}! 🙏\n\nआमच्या घरी आनंदाची बातमी आहे. *सायली आणि जीवन* यांचा शुभविवाह *१२ डिसेंबर २०२६* रोजी आहे, आणि तुमच्याशिवाय तो अपूर्ण आहे.\n\nWe have happy news, {name}. Saili & Jeevan are getting married, and we really want you there.\n\n✨ तुमच्यासाठी खास निमंत्रण तयार केले आहे. त्यावर तुमचे नावही आहे! लिंक उघडा आणि पडदा सरकवा:\n{link}\n\nतुमची वाट पाहतोय. सप्रेम निमंत्रण 🙏'],
+    ['Friendly, English (friends and cousins)',
+      'Hey {name}! 🎉\n\nSaili & Jeevan are getting married on *12 December 2026* and your name is on the guest list 😄\n\nWe made a little invitation just for you. Open it, slide the curtains apart and you will find the schedule, the location and a surprise with your name on it ✨\n\n{link}\n\nPlease do come. It would not be the same without you! 🙏'],
+    ['Traditional, Marathi only (elders)',
+      '॥ श्री गणेशाय नमः ॥\n\nनमस्कार {name},\n\nआमच्या घरी मंगलकार्य आहे! *सायली आणि जीवन* यांचा शुभविवाह *शनिवार, १२ डिसेंबर २०२६* रोजी निसर्ग गार्डन मंगल कार्यालय, आवसरी (आंबेगाव) येथे होणार आहे.\n\nआपण सहकुटुंब उपस्थित राहून वधू-वरांना आशीर्वाद द्यावेत, ही नम्र विनंती. 🙏\n\nआपल्यासाठी खास तयार केलेले निमंत्रण पाहण्यासाठी लिंक उघडा:\n{link}\n\n॥ सप्रेम निमंत्रण ॥']
+  ];
+  function fillStyles(sel, list, target) {
+    list.forEach(function (it, i) { var o = document.createElement('option'); o.value = i; o.textContent = it[0]; sel.appendChild(o); });
+    sel.addEventListener('change', function () { target.value = list[+sel.value][1]; target.dispatchEvent(new Event('input')); });
+  }
+  var KEY = 'invite-links-v2', store = {};
   try { store = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
-  $('base').value = store.base || '';
   $('names').value = store.names || '';
-  $('msg').value = store.msg || DEFAULT_MSG;
+  $('msg').value = store.msg || P_STYLES[0][1];
+  $('gmsg').value = store.gmsg || G_STYLES[0][1];
+  fillStyles($('pstyle'), P_STYLES, $('msg'));
+  fillStyles($('gstyle'), G_STYLES, $('gmsg'));
   if (store.lang) $('lang').value = store.lang;
+  function save() { try { localStorage.setItem(KEY, JSON.stringify({ names: $('names').value, msg: $('msg').value, gmsg: $('gmsg').value, lang: $('lang').value })); } catch (e) {} }
 
-  function save() { try { localStorage.setItem(KEY, JSON.stringify({ base: $('base').value, names: $('names').value, msg: $('msg').value, lang: $('lang').value })); } catch (e) {} }
-  ['base', 'names', 'msg', 'lang'].forEach(function (id) { $(id).addEventListener('input', save); });
+  var canShare = typeof navigator.share === 'function';
+  if (canShare) $('g-share').hidden = false;
 
+  function qs() { return $('lang').value === 'en' ? 'lang=en' : ''; }
+  function plainLink() { return BASE + '/' + (qs() ? '?' + qs() : ''); }
+  function nameLink(n) { return BASE + '/?to=' + encodeURIComponent(n) + (qs() ? '&' + qs() : ''); }
   function phoneOf(s) { var d = (s || '').replace(/\D/g, ''); if (d.length === 10) d = '91' + d; return d.length >= 11 ? d : ''; }
-  var items = [];
+  function waHref(phone, text) { return 'https://wa.me/' + (phone || '') + '?text=' + encodeURIComponent(text); }
 
   function copy(text, btn) {
     var old = btn.textContent;
@@ -91,32 +134,43 @@ li .btns { display: flex; flex-wrap: wrap; gap: 8px; }
     function fb() { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); ok(); } catch (e) {} document.body.removeChild(t); }
     try { navigator.clipboard.writeText(text).then(ok, fb); } catch (e) { fb(); }
   }
+  function share(text) { try { navigator.share({ text: text }).catch(function () {}); } catch (e) {} }
 
+  /* group block */
+  function groupText() { return $('gmsg').value.replace(/\{link\}/g, plainLink()); }
+  function refreshGroup() { $('glink').textContent = plainLink(); $('g-wa').href = waHref('', groupText()); }
+  $('g-share').addEventListener('click', function () { share(groupText()); });
+  $('g-copy').addEventListener('click', function () { copy(plainLink(), this); });
+  ['gmsg', 'lang'].forEach(function (id) { $(id).addEventListener('input', function () { refreshGroup(); save(); }); });
+  refreshGroup();
+  ['names', 'msg'].forEach(function (id) { $(id).addEventListener('input', save); });
+
+  /* personal links */
+  var items = [];
   $('go').addEventListener('click', function () {
-    var base = $('base').value.trim().replace(/\/+$/, '');
     var out = $('out'); out.innerHTML = ''; items = [];
-    if (!/^https?:\/\//i.test(base)) { $('count').hidden = false; $('count').textContent = 'Type your website address first, starting with https://'; return; }
-    var lines = $('names').value.split('\n');
-    lines.forEach(function (ln) {
+    $('names').value.split('\n').forEach(function (ln) {
       ln = ln.trim(); if (!ln) return;
       var i = ln.lastIndexOf(','), name = ln, phone = '';
       if (i > -1 && phoneOf(ln.slice(i + 1))) { name = ln.slice(0, i).trim(); phone = phoneOf(ln.slice(i + 1)); }
       name = name.replace(/\s+/g, ' ').slice(0, 60);
-      var link = base + '/?to=' + encodeURIComponent(name) + ($('lang').value === 'en' ? '&lang=en' : '');
-      var text = $('msg').value.replace(/\{name\}/g, name).replace(/\{link\}/g, link);
-      items.push({ name: name, link: link, text: text, phone: phone });
+      if (!name) return;
+      var link = nameLink(name);
+      items.push({ name: name, link: link, phone: phone, text: $('msg').value.replace(/\{name\}/g, name).replace(/\{link\}/g, link) });
     });
     items.forEach(function (it) {
       var li = document.createElement('li');
       var b = document.createElement('b'); b.textContent = it.name;
       var c = document.createElement('code'); c.textContent = it.link;
       var d = document.createElement('div'); d.className = 'btns';
-      var cp = document.createElement('button'); cp.type = 'button'; cp.className = 'btn alt small'; cp.textContent = 'Copy link';
-      cp.addEventListener('click', function () { copy(it.link, cp); });
       var wa = document.createElement('a'); wa.className = 'btn wa small'; wa.target = '_blank'; wa.rel = 'noopener';
       wa.textContent = it.phone ? 'Send on WhatsApp' : 'Send on WhatsApp (pick contact)';
-      wa.href = 'https://wa.me/' + it.phone + '?text=' + encodeURIComponent(it.text);
-      d.appendChild(cp); d.appendChild(wa);
+      wa.href = waHref(it.phone, it.text);
+      d.appendChild(wa);
+      if (canShare) { var sh = document.createElement('button'); sh.type = 'button'; sh.className = 'btn alt small'; sh.textContent = 'Share'; sh.addEventListener('click', function () { share(it.text); }); d.appendChild(sh); }
+      var cp = document.createElement('button'); cp.type = 'button'; cp.className = 'btn alt small'; cp.textContent = 'Copy link';
+      cp.addEventListener('click', function () { copy(it.link, cp); });
+      d.appendChild(cp);
       li.appendChild(b); li.appendChild(c); li.appendChild(d); out.appendChild(li);
     });
     $('count').hidden = false;
@@ -124,6 +178,7 @@ li .btns { display: flex; flex-wrap: wrap; gap: 8px; }
     $('copyall').hidden = !items.length;
     save();
   });
+  $('lang').addEventListener('change', function () { if (items.length) $('go').click(); });
   $('copyall').addEventListener('click', function () {
     copy(items.map(function (it) { return it.name + '\t' + it.link; }).join('\n'), this);
   });
